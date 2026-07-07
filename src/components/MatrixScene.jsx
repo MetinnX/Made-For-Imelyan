@@ -19,7 +19,7 @@ export default function MatrixScene({ onComplete }) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const alphabet = "HAPPYBIRTHDAYANITA";
+    const alphabet = "HAPPYBIRTHDAYIMELYAN";
     const fontSize = 16;
     let columns = canvas.width / fontSize;
     let rainDrops = Array.from({ length: columns }).map(() => 1);
