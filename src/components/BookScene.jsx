@@ -9,8 +9,7 @@ export default function BookScene({ onComplete }) {
     } else if (bookState === 1) {
       setBookState(2);
     } else if (bookState === 2) {
-      setBookState(0); // Buku menutup kembali
-      // Memberikan jeda 1.5 detik agar animasi menutup selesai sebelum berganti scene
+      setBookState(0);
       setTimeout(() => {
         onComplete();
       }, 1500);
@@ -19,19 +18,22 @@ export default function BookScene({ onComplete }) {
 
   return (
     <div className="scene-container center-content flex-col fade-in-scene">
-      {/* Tombol Navigasi Lembar Buku */}
-      <button className="control-action-btn" onClick={advanceBook}>
-        {bookState === 0 && "Buka Buku 📘"}
-        {bookState === 1 && "Halaman Selanjutnya ➡️"}
-        {bookState === 2 && "Tutup & Lihat Kejutan Final ✨"}
-      </button>
+      {/* 
+         KETERANGAN: Tombol sudah dihapus. 
+         Fungsi klik dipindahkan ke dalam komponen .book-sheet 
+      */}
 
       <div className={`book-3d ${bookState > 0 ? 'is-opened' : ''}`}>
-        {/* LEMBARAN 1: COVER DEPAN & SURAT PERTAMA */}
-        <div className={`book-sheet cover-sheet ${bookState >= 1 ? 'flipped-180' : ''}`}>
+        
+        {/* LEMBARAN 1: COVER DEPAN (Dapat diklik untuk membuka) */}
+        <div 
+          className={`book-sheet cover-sheet ${bookState >= 1 ? 'flipped-180' : ''}`} 
+          onClick={advanceBook}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="sheet-face face-front cover-front">
             <h2>Happy Birthday Anita!</h2>
-            <p className="sub-hint">Klik tombol di atas untuk membaca ❤️</p>
+            <p className="sub-hint">Sentuh buku untuk membuka ❤️</p>
           </div>
           <div className="sheet-face face-back page-bg">
             <h3>Dear Anita...</h3>
@@ -41,8 +43,12 @@ export default function BookScene({ onComplete }) {
           </div>
         </div>
 
-        {/* LEMBARAN 2: FOTO HALAMAN 1 & FOTO HALAMAN 2 */}
-        <div className={`book-sheet middle-sheet ${bookState >= 2 ? 'flipped-180' : ''}`}>
+        {/* LEMBARAN 2: FOTO HALAMAN (Dapat diklik untuk lanjut) */}
+        <div 
+          className={`book-sheet middle-sheet ${bookState >= 2 ? 'flipped-180' : ''}`} 
+          onClick={advanceBook}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="sheet-face face-front page-bg">
             <div className="photo-frame-container">
               <img src="/assets/images/anita-page1.jpg" alt="Anita Page 1" className="embedded-img" />
@@ -57,8 +63,12 @@ export default function BookScene({ onComplete }) {
           </div>
         </div>
 
-        {/* HALAMAN DASAR BUKU (STABIL / TIDAK BERPUTAR) */}
-        <div className="book-sheet base-sheet page-bg">
+        {/* HALAMAN DASAR BUKU (Dapat diklik untuk menutup) */}
+        <div 
+          className="book-sheet base-sheet page-bg" 
+          onClick={advanceBook}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="sheet-face face-front">
             <h3>Harapanku...</h3>
             <p className="letter-text">
