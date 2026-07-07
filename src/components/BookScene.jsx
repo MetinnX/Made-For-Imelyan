@@ -131,7 +131,7 @@ export default function BookScene({ onComplete }) {
           {/* HALAMAN KANAN 2 */}
           <div className="sheet-face face-front" style={{ width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
             <img 
-              src="/assets/images/pasangan-kanan-2.jpg" 
+              src="/assets/images/pasangankanan2.jpg" 
               alt="Foto Pasangan Kanan 2" 
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
             />
