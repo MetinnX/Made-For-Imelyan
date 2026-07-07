@@ -5,7 +5,7 @@ export default function BookMessage({ bookState }) {
     <div className="message-card">
       {bookState === 0 && (
         <>
-          <h3 className="message-title">Happy Birthday Imelyan! ❤️</h3>
+          <h3 className="message-title">Hallow Sayangku! ❤️</h3>
           <p className="message-subtitle">Sentuh buku di bawah untuk membuka</p>
         </>
       )}
@@ -14,19 +14,20 @@ export default function BookMessage({ bookState }) {
         <>
           <h4 className="message-title">Dear Imelyan..</h4>
           <p className="message-text">
-            Selamat ulang tahun! Di hari yang sangat spesial ini, aku sengaja meluangkan waktu membuatkan website kejutan ini khusus untukmu.
+            Maaf sayang belum bisa bakase yang terbaik untk brpa bulan ini🙂, Tapi kalau aku ad rejeki tetap aku m bantu apa yang kau sukaa yaa
+
           </p>
-          <p className="message-quote">"Happy Birthday Sayang ❤️"</p>
+          <p className="message-quote">"Jadi tmbah syangg aku ini ❤️"</p>
         </>
       )}
       
       {bookState === 2 && (
         <>
-          <h4 className="message-title">Harapanku...</h4>
+          <h4 className="message-title">Hrapansihh...</h4>
           <p className="message-text">
-            Semoga di usia yang baru ini kebahagiaan selalu menyertai setiap langkahmu. Silakan sentuh lagi untuk menutup buku, ada kejutan terakhir untukmu.
+            Semoga trng bisa bkasee trun trng p EGOO!! biar mslah sbesar apapun. suapaya trang ttap SAMA - SAMA TURUS🫂.
           </p>
-          <p className="message-quote">"As long as you're here..."</p>
+          <p className="message-quote">"Loveyouu syngkuu imell..."</p>
         </>
       )}
     </div>
