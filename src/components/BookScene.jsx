@@ -69,22 +69,25 @@ export default function BookScene({ onComplete }) {
         <div 
           className={`book-sheet cover-sheet ${bookState >= 1 ? 'flipped-180' : ''}`} 
           onClick={advanceBook}
-          style={{ cursor: 'pointer' }}
+          style={{ 
+            cursor: 'pointer', 
+            zIndex: bookState === 0 ? 3 : 1 // Saat ditutup ada di paling atas, saat dibuka tertumpuk di paling bawah kiri
+          }}
         >
-          {/* SAMPUL DEPAN (Saat buku tertutup) */}
-          <div className="sheet-face face-front cover-front" style={{ padding: 0, overflow: 'hidden' }}>
+          {/* SAMPUL DEPAN */}
+          <div className="sheet-face face-front cover-front" style={{ width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
             <img 
               src="/assets/images/cover-buku.jpg" 
               alt="Cover Depan" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
             />
           </div>
-          {/* HALAMAN KIRI 1 (Saat buku dibuka pertama kali) */}
-          <div className="sheet-face face-back page-bg" style={{ padding: 0, overflow: 'hidden' }}>
+          {/* HALAMAN KIRI 1 */}
+          <div className="sheet-face face-back page-bg" style={{ width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
             <img 
               src="/assets/images/pasangan-kiri-1.jpg" 
               alt="Foto Pasangan Kiri 1" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
             />
           </div>
         </div>
@@ -93,22 +96,25 @@ export default function BookScene({ onComplete }) {
         <div 
           className={`book-sheet middle-sheet ${bookState >= 2 ? 'flipped-180' : ''}`} 
           onClick={advanceBook}
-          style={{ cursor: 'pointer' }}
+          style={{ 
+            cursor: 'pointer', 
+            zIndex: 2 // Lembaran ini selalu berada di urutan tengah
+          }}
         >
-          {/* HALAMAN KANAN 1 (Saat buku dibuka pertama kali) */}
-          <div className="sheet-face face-front page-bg" style={{ padding: 0, overflow: 'hidden' }}>
+          {/* HALAMAN KANAN 1 */}
+          <div className="sheet-face face-front page-bg" style={{ width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
             <img 
               src="/assets/images/pasangan-kanan-1.jpg" 
               alt="Foto Pasangan Kanan 1" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
             />
           </div>
-          {/* HALAMAN KIRI 2 (Saat buku dibuka kedua kali) */}
-          <div className="sheet-face face-back page-bg" style={{ padding: 0, overflow: 'hidden' }}>
+          {/* HALAMAN KIRI 2 */}
+          <div className="sheet-face face-back page-bg" style={{ width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
             <img 
               src="/assets/images/pasangan-kiri-2.jpg" 
               alt="Foto Pasangan Kiri 2" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
             />
           </div>
         </div>
@@ -117,14 +123,17 @@ export default function BookScene({ onComplete }) {
         <div 
           className="book-sheet base-sheet page-bg" 
           onClick={advanceBook}
-          style={{ cursor: 'pointer' }}
+          style={{ 
+            cursor: 'pointer', 
+            zIndex: 1 // Selalu berada di urutan paling bawah (dasar buku)
+          }}
         >
-          {/* HALAMAN KANAN 2 (Saat buku dibuka kedua kali) */}
-          <div className="sheet-face face-front" style={{ padding: 0, overflow: 'hidden' }}>
+          {/* HALAMAN KANAN 2 */}
+          <div className="sheet-face face-front" style={{ width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
             <img 
               src="/assets/images/pasangan-kanan-2.jpg" 
               alt="Foto Pasangan Kanan 2" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
             />
           </div>
         </div>
