@@ -19,6 +19,9 @@ export default function BookScene({ onComplete }) {
 
   return (
     <div className="scene-container">
+      {/* --- LAPISAN BINTANG BERTERBANGAN (BACKGROUND) --- */}
+      <div className="starfield"></div>
+
       {/* --- KOTAK TEKS DI ATAS BUKU --- */}
       <BookMessage bookState={bookState} />
 
