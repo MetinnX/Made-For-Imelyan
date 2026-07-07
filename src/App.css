@@ -228,60 +228,58 @@ body {
 
 
 /* =======================================================
-   SCENE 3 STYLING (Flying Compact Neon Heart Grid)
+   SCENE 3 STYLING (Garis Tepi Hati Sempurna & Kosong di Tengah)
    ======================================================= */
 
-/* Container Formasi Mini (Dibatasi agar tidak full layar) */
+/* Pasang container utama mati di tengah-tengah layar */
 .heart-formation-grid {
   position: relative;
-  width: 340px;  
-  height: 340px;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Polaroid Mini dengan Efek Neon Berpijar */
+/* Ukuran foto dibuat mini & kotak estetik seperti di foto 1000047454.jpg */
 .scatter-polaroid {
   position: absolute;
-  width: 65px;   
-  height: 80px;
+  width: 60px;   
+  height: 60px;
   background: white;
-  padding: 4px 4px 12px 4px;
-  border-radius: 3px;
+  padding: 3px;
+  border-radius: 12px; /* Membuat sudut foto membulat halus */
   box-sizing: border-box;
   
-  /* Efek Neon Glow Merah Muda Terang Sesuai Video 1000047444.mp4 */
-  border: 1.5px solid var(--pink-primary);
+  /* Efek Neon Glow Pink Cerah Mengitari Foto */
+  border: 2px solid #ff9ebb;
   box-shadow: 
-    0 0 6px var(--pink-primary), 
-    0 0 14px var(--pink-primary), 
-    inset 0 0 3px var(--pink-primary);
+    0 0 8px var(--pink-primary), 
+    0 0 16px rgba(255, 71, 126, 0.6);
   
-  /* Titik awal keluar: Tepat di tengah (posisi sampul buku sebelumnya) */
+  /* Titik awal keluar dari tengah (bekas buku) */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0) rotate(0deg);
   opacity: 0;
   
-  /* Jalankan animasi menyebar */
-  animation: burstAndAssembleMini 1s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+  /* Animasi menyebar yang halus dan rapi */
+  animation: popToPerfectHeart 1s cubic-bezier(0.25, 1.1, 0.4, 1) forwards;
 }
 
-/* Memastikan gambar polaroid pas di bingkai */
-.scatter-polaroid img, 
-.polaroid-frame img {
+/* Memastikan gambar memenuhi frame kotak */
+.scatter-polaroid img {
   width: 100%;
-  height: 60px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 1px;
+  border-radius: 9px;
   display: block;
 }
 
-/* Animasi Menyebar Keluar dari Satu Titik Pusat */
-@keyframes burstAndAssembleMini {
+/* Animasi Pop-Out Menyebar */
+@keyframes popToPerfectHeart {
   0% {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.1) rotate(0deg);
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
     opacity: 0;
   }
   20% {
@@ -289,37 +287,35 @@ body {
   }
   100% {
     opacity: 1;
-    /* Nilai top, left, dan rotasi akhir akan diambil dari target-pos di bawah */
+    /* Bergerak ke koordinat tx & ty, mempertahankan posisi di tengah */
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot));
   }
 }
 
 /* 
-   MATRIKS KOORDINAT HATI MINI (PADAT & DI TENGAH LAYAR)
+   MATRIKS KOORDINAT SIMETRIS (8 KIRI, 8 KANAN, 1 BAWAH)
+   Ukuran dikunci rapat dalam radius piksel agar tidak full layar
 */
 
-/* Bagian Atas - Lengkungan Kiri */
-.target-pos-1  { top: 18%; left: 38%; transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
-.target-pos-2  { top: 12%; left: 25%; transform: translate(-50%, -50%) scale(1) rotate(6deg); }
-.target-pos-3  { top: 16%; left: 12%; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
+/* --- 1 FOTO UJUNG LANCIP BAWAH --- */
+.target-pos-9  { --tx: 0px;    --ty: 110px;  --rot: 0deg; }
 
-/* Bagian Sisi Kiri Turun */
-.target-pos-4  { top: 28%; left: 6%;  transform: translate(-50%, -50%) scale(1) rotate(4deg); }
-.target-pos-5  { top: 42%; left: 7%;  transform: translate(-50%, -50%) scale(1) rotate(-8deg); }
-.target-pos-6  { top: 56%; left: 13%; transform: translate(-50%, -50%) scale(1) rotate(12deg); }
-.target-pos-7  { top: 68%; left: 22%; transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
-.target-pos-8  { top: 78%; left: 34%; transform: translate(-50%, -50%) scale(1) rotate(10deg); }
+/* --- 8 FOTO SISI KIRI (Membentuk Lengkungan Kiri) --- */
+.target-pos-8  { --tx: -24px;  --ty: 85px;   --rot: -6deg; }
+.target-pos-7  { --tx: -48px;  --ty: 60px;   --rot: -12deg; }
+.target-pos-6  { --tx: -72px;  --ty: 32px;   --rot: -18deg; }
+.target-pos-5  { --tx: -90px;  --ty: 2px;    --rot: -15deg; }
+.target-pos-4  { --tx: -96px;  --ty: -30px;  --rot: -5deg; }
+.target-pos-3  { --tx: -84px;  --ty: -60px;  --rot: 8deg; }
+.target-pos-2  { --tx: -54px;  --ty: -74px;  --rot: 18deg; }
+.target-pos-1  { --tx: -22px;  --ty: -56px;  --rot: 5deg; } /* Cekungan atas kiri */
 
-/* Bagian Ujung Lancip Bawah */
-.target-pos-9  { top: 86%; left: 47%; transform: translate(-50%, -50%) scale(1) rotate(-3deg); }
-.target-pos-10 { top: 85%; left: 58%; transform: translate(-50%, -50%) scale(1) rotate(6deg); }
-
-/* Bagian Sisi Kanan Naik */
-.target-pos-11 { top: 76%; left: 71%; transform: translate(-50%, -50%) scale(1) rotate(-8deg); }
-.target-pos-12 { top: 65%; left: 82%; transform: translate(-50%, -50%) scale(1) rotate(5deg); }
-.target-pos-13 { top: 52%; left: 89%; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
-.target-pos-14 { top: 38%; left: 91%; transform: translate(-50%, -50%) scale(1) rotate(11deg); }
-.target-pos-15 { top: 24%; left: 86%; transform: translate(-50%, -50%) scale(1) rotate(-4deg); }
-
-/* Bagian Atas - Lengkungan Kanan */
-.target-pos-16 { top: 14%; left: 74%; transform: translate(-50%, -50%) scale(1) rotate(8deg); }
-.target-pos-17 { top: 11%; left: 61%; transform: translate(-50%, -50%) scale(1) rotate(-6deg); }
+/* --- 8 FOTO SISI KANAN (Membentuk Lengkungan Kanan) --- */
+.target-pos-10 { --tx: 24px;   --ty: 85px;   --rot: 6deg; }
+.target-pos-11 { --tx: 48px;   --ty: 60px;   --rot: 12deg; }
+.target-pos-12 { --tx: 72px;   --ty: 32px;   --rot: 18deg; }
+.target-pos-13 { --tx: 90px;   --ty: 2px;    --rot: 15deg; }
+.target-pos-14 { --tx: 96px;   --ty: -30px;  --rot: 5deg; }
+.target-pos-15 { --tx: 84px;   --ty: -60px;  --rot: -8deg; }
+.target-pos-16 { --tx: 54px;   --ty: -74px;  --rot: -18deg; }
+.target-pos-17 { --tx: 22px;   --ty: -56px;  --rot: -5deg; } /* Cekungan atas kanan */
