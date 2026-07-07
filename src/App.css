@@ -97,7 +97,6 @@ body {
   transform: translateX(0px); 
 }
 
-
 /* Geser poros buku ke kanan saat terbuka agar posisinya tetap di tengah layar */
 .book-3d.is-opened {
   transform: translateX(calc(var(--page-width) / 2));
@@ -227,37 +226,100 @@ body {
 .letter-text { font-family: 'Georgia', serif; line-height: 1.6; font-size: 1.05rem; color: #333; }
 .signature { text-align: right; font-weight: bold; margin-top: 30px; font-family: 'Georgia', serif; }
 
-/* SCENE 3 STYLING (Flying Heart Grid) */
-.epic-title { color: var(--pink-primary); font-size: 3rem; text-shadow: 0 0 15px var(--pink-glow); margin-bottom: 40px; letter-spacing: 4px; }
-.heart-formation-grid { position: relative; width: 500px; height: 450px; }
+
+/* =======================================================
+   SCENE 3 STYLING (Flying Compact Neon Heart Grid)
+   ======================================================= */
+
+/* Container Formasi Mini (Dibatasi agar tidak full layar) */
+.heart-formation-grid {
+  position: relative;
+  width: 340px;  
+  height: 340px;
+  margin: 0 auto;
+}
+
+/* Polaroid Mini dengan Efek Neon Berpijar */
 .scatter-polaroid {
-  position: absolute; width: 90px; height: 110px; padding: 6px 6px 18px 6px; background-color: #fff;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4); transform: translate(200px, 180px) scale(0) rotate(720deg);
-  opacity: 0; animation: burstAndAssemble 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  position: absolute;
+  width: 65px;   
+  height: 80px;
+  background: white;
+  padding: 4px 4px 12px 4px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  
+  /* Efek Neon Glow Merah Muda Terang Sesuai Video 1000047444.mp4 */
+  border: 1.5px solid var(--pink-primary);
+  box-shadow: 
+    0 0 6px var(--pink-primary), 
+    0 0 14px var(--pink-primary), 
+    inset 0 0 3px var(--pink-primary);
+  
+  /* Titik awal keluar: Tepat di tengah (posisi sampul buku sebelumnya) */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0) rotate(0deg);
+  opacity: 0;
+  
+  /* Jalankan animasi menyebar */
+  animation: burstAndAssembleMini 1s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
 }
-.scatter-polaroid img { width: 100%; height: 90px; object-fit: cover; }
 
-@keyframes burstAndAssemble {
-  0% { transform: translate(200px, 180px) scale(0) rotate(720deg); opacity: 0; }
-  40% { opacity: 1; }
-  100% { opacity: 1; transform: translate(var(--target-x), var(--target-y)) scale(1) rotate(var(--target-rot)); }
+/* Memastikan gambar polaroid pas di bingkai */
+.scatter-polaroid img, 
+.polaroid-frame img {
+  width: 100%;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 1px;
+  display: block;
 }
 
-/* MATRIKS FORMULASI KOORDINAT HATI (17 TITIK) */
-.target-pos-1  { --target-x: 200px; --target-y: 30px;  --target-rot: -5deg; }
-.target-pos-2  { --target-x: 110px; --target-y: 10px;  --target-rot: -12deg; }
-.target-pos-3  { --target-x: 290px; --target-y: 10px;  --target-rot: 10deg; }
-.target-pos-4  { --target-x: 30px;  --target-y: 40px;  --target-rot: -20deg; }
-.target-pos-5  { --target-x: 370px; --target-y: 40px;  --target-rot: 18deg; }
-.target-pos-6  { --target-x: -20px; --target-y: 110px; --target-rot: -15deg; }
-.target-pos-7  { --target-x: 420px; --target-y: 110px; --target-rot: 15deg; }
-.target-pos-8  { --target-x: -10px; --target-y: 190px; --target-rot: -8deg; }
-.target-pos-9  { --target-x: 410px; --target-y: 190px; --target-rot: 12deg; }
-.target-pos-10 { --target-x: 30px;  --target-y: 270px; --target-rot: 5deg; }
-.target-pos-11 { --target-x: 370px; --target-y: 270px; --target-rot: -10deg; }
-.target-pos-12 { --target-x: 90px;  --target-y: 340px; --target-rot: 15deg; }
-.target-pos-13 { --target-x: 310px; --target-y: 340px; --target-rot: -8deg; }
-.target-pos-14 { --target-x: 150px; --target-y: 390px; --target-rot: 4deg; }
-.target-pos-15 { --target-x: 250px; --target-y: 390px; --target-rot: -5deg; }
-.target-pos-16 { --target-x: 200px; --target-y: 420px; --target-rot: 0deg; }
-.target-pos-17 { --target-x: 200px; --target-y: 190px; --target-rot: 5deg; }
+/* Animasi Menyebar Keluar dari Satu Titik Pusat */
+@keyframes burstAndAssembleMini {
+  0% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.1) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    /* Nilai top, left, dan rotasi akhir akan diambil dari target-pos di bawah */
+  }
+}
+
+/* 
+   MATRIKS KOORDINAT HATI MINI (PADAT & DI TENGAH LAYAR)
+*/
+
+/* Bagian Atas - Lengkungan Kiri */
+.target-pos-1  { top: 18%; left: 38%; transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
+.target-pos-2  { top: 12%; left: 25%; transform: translate(-50%, -50%) scale(1) rotate(6deg); }
+.target-pos-3  { top: 16%; left: 12%; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
+
+/* Bagian Sisi Kiri Turun */
+.target-pos-4  { top: 28%; left: 6%;  transform: translate(-50%, -50%) scale(1) rotate(4deg); }
+.target-pos-5  { top: 42%; left: 7%;  transform: translate(-50%, -50%) scale(1) rotate(-8deg); }
+.target-pos-6  { top: 56%; left: 13%; transform: translate(-50%, -50%) scale(1) rotate(12deg); }
+.target-pos-7  { top: 68%; left: 22%; transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
+.target-pos-8  { top: 78%; left: 34%; transform: translate(-50%, -50%) scale(1) rotate(10deg); }
+
+/* Bagian Ujung Lancip Bawah */
+.target-pos-9  { top: 86%; left: 47%; transform: translate(-50%, -50%) scale(1) rotate(-3deg); }
+.target-pos-10 { top: 85%; left: 58%; transform: translate(-50%, -50%) scale(1) rotate(6deg); }
+
+/* Bagian Sisi Kanan Naik */
+.target-pos-11 { top: 76%; left: 71%; transform: translate(-50%, -50%) scale(1) rotate(-8deg); }
+.target-pos-12 { top: 65%; left: 82%; transform: translate(-50%, -50%) scale(1) rotate(5deg); }
+.target-pos-13 { top: 52%; left: 89%; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
+.target-pos-14 { top: 38%; left: 91%; transform: translate(-50%, -50%) scale(1) rotate(11deg); }
+.target-pos-15 { top: 24%; left: 86%; transform: translate(-50%, -50%) scale(1) rotate(-4deg); }
+
+/* Bagian Atas - Lengkungan Kanan */
+.target-pos-16 { top: 14%; left: 74%; transform: translate(-50%, -50%) scale(1) rotate(8deg); }
+.target-pos-17 { top: 11%; left: 61%; transform: translate(-50%, -50%) scale(1) rotate(-6deg); }
