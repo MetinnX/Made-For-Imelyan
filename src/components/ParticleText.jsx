@@ -14,9 +14,13 @@ export default function ParticleText({ onComplete }) {
         setText(sequence[index]);
       } else {
         clearInterval(interval);
-        onComplete();
+        // Memberikan jeda ekstra 2 detik setelah teks terakhir (❤️) selesai
+        setTimeout(() => {
+          onComplete();
+        }, 2000);
       }
-    }, 1500); // Durasi diperpanjang agar animasi smooth punya waktu lebih lama
+    }, 2500); // Durasi diperlambat menjadi 2.5 detik per kata agar nyaman dibaca
+    
     return () => clearInterval(interval);
   }, [onComplete]);
 
@@ -39,7 +43,6 @@ export default function ParticleText({ onComplete }) {
       
       const img = octx.getImageData(0, 0, canvas.width, canvas.height).data;
       const targets = [];
-      // Step diperkecil (7) untuk bentuk yang jauh lebih detail dan sempurna
       for (let y = 0; y < canvas.height; y += 7) {
         for (let x = 0; x < canvas.width; x += 7) {
           if (img[(y * canvas.width + x) * 4 + 3] > 128) targets.push({ x, y });
@@ -50,12 +53,11 @@ export default function ParticleText({ onComplete }) {
 
     const targets = getTargetCoordinates();
     
-    // Inisialisasi/Update partikel dengan sistem velocity
     particlesRef.current = targets.map((t, i) => {
       const p = particlesRef.current[i] || { 
         x: Math.random() * canvas.width, 
         y: Math.random() * canvas.height,
-        vx: 0, vy: 0 // Velocity (kecepatan)
+        vx: 0, vy: 0 
       };
       return { ...p, tx: t.x, ty: t.y };
     });
@@ -64,19 +66,17 @@ export default function ParticleText({ onComplete }) {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Glow/Neon yang jauh lebih tajam dan terang
       ctx.shadowBlur = 20; 
-      ctx.shadowColor = '#ff007f'; // Warna Pink Neon intens
-      ctx.fillStyle = '#ff71ce';   // Inti warna pink yang sangat cerah
+      ctx.shadowColor = '#ff007f'; 
+      ctx.fillStyle = '#ff71ce';   
 
       particlesRef.current.forEach(p => {
-        // Fisika Smooth: Menambahkan akselerasi (spring physics)
         const dx = p.tx - p.x;
         const dy = p.ty - p.y;
         
-        p.vx += dx * 0.02; // Acceleration (kekuatan tarikan)
+        p.vx += dx * 0.02; 
         p.vy += dy * 0.02;
-        p.vx *= 0.85;       // Friction (agar gerakan tidak kaku/menghaluskan berhenti)
+        p.vx *= 0.85;       
         p.vy *= 0.85;
         
         p.x += p.vx;
