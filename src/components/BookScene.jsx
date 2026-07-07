@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import BookMessage from './BookMessage';
 
+const bgMusic = new Audio('/assets/music/background-song.mp3');
+
+
 export default function BookScene({ onComplete }) {
   const [bookState, setBookState] = useState(0);
 
