@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { bookPages } from './texts'; // Sesuaikan path
+import { bookPages } from '../data/texts';
 
 // Musik - gunakan useEffect agar tidak re-render
 const backgroundMusic = new Audio('/assets/music/lagu-ulang-tahun.mp3'); 
