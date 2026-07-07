@@ -29,7 +29,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: transparent;
+  background: #000;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -319,11 +319,3 @@ body {
 .target-pos-15 { --tx: 84px;   --ty: -60px;  --rot: -8deg; }
 .target-pos-16 { --tx: 54px;   --ty: -74px;  --rot: -18deg; }
 .target-pos-17 { --tx: 22px;   --ty: -56px;  --rot: -5deg; } /* Cekungan atas kanan */
-
-
-.main-viewport{position:relative;width:100vw;height:100vh;overflow:hidden;}
-.starfield,.starfield:before,.starfield:after{content:"";position:fixed;inset:-100%;pointer-events:none;z-index:0;background-repeat:repeat;}
-.starfield{background-image:radial-gradient(white 1px,transparent 1px);background-size:60px 60px;animation:drift 120s linear infinite;}
-.starfield:before{background-image:radial-gradient(#ffdfff 1.5px,transparent 1.5px);background-size:120px 120px;opacity:.6;animation:drift 180s linear infinite;}
-.starfield:after{background-image:radial-gradient(#fff 2px,transparent 2px);background-size:220px 220px;opacity:.4;animation:drift 240s linear infinite;}
-@keyframes drift{from{transform:translateY(0)}to{transform:translateY(400px)}}
