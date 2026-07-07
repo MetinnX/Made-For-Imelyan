@@ -4,21 +4,66 @@
   --pink-glow: rgba(255, 71, 126, 0.6);
   
   /* --- PENGATURAN UKURAN BUKU --- */
-  /* Ubah dua angka di bawah ini untuk mengecilkan/membesarkan ukuran buku */
   --page-width: 160px;   
   --page-height: 230px;  
 }
 
-body {
-  margin: 0; padding: 0;
-  /* KOSMIK GRADASI DIPINDAHKAN KE SINI SEBAGAI ALAS PALING DASAR */
+/* 1. RESET DEFAULT BROWSER */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100dvh; /* Menggunakan dvh agar pas dengan layar HP modern (anti-terpotong) */
   background: radial-gradient(circle at center, #161224 0%, var(--bg-dark) 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
   color: #fff;
 }
 
-/* CONTAINER UTAMA SCENE (Diubah menjadi transparan total agar bintang tembus pandang) */
+.main-viewport {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* 2. LAPISAN BINTANG GLOBAL (FIXED & SEAMLESS) */
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  
+  /* Formasi bintang dengan koordinat aman di bawah 300px */
+  background-image: 
+    radial-gradient(circle at 40px 60px, #ffffff 1.5px, transparent 1.5px),
+    radial-gradient(circle at 140px 200px, var(--pink-primary) 2px, transparent 2px),
+    radial-gradient(circle at 220px 90px, #ffffff 1.5px, transparent 1.5px),
+    radial-gradient(circle at 250px 240px, rgba(255, 255, 255, 0.7) 2px, transparent 2px);
+  
+  background-size: 300px 300px;
+  background-repeat: repeat;
+  opacity: 0.75;
+  
+  /* Layering super aman */
+  z-index: 1; 
+  pointer-events: none; /* Agar tidak memblokir klik mouse atau sentuhan jari */
+  
+  /* Booster performa grafis (Anti-Lag & Anti-Kedip) */
+  will-change: background-position;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  
+  animation: flyStarsBy 28s linear infinite;
+}
+
+@keyframes flyStarsBy {
+  0% { background-position: 0 0; }
+  100% { background-position: 300px 300px; }
+}
+
+/* 3. CONTAINER UNTUK SEMUA SCENE */
 .scene-container {
   position: absolute;
   width: 100%;
@@ -29,66 +74,42 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   
-  /* WAJIB TRANSPARAN agar tidak menjadi tembok penghalang bintang */
+  /* Dipaksa transparan agar bintang di belakangnya selalu kelihatan */
   background: transparent !important; 
   padding: 20px;
   box-sizing: border-box;
   overflow: hidden;
   
-  /* BERADA DI ATAS BINTANG */
+  /* Berada di atas bintang */
   z-index: 2; 
 }
 
-/* KOTAK TEKS DI ATAS BUKU (BookMessage) */
+/* KOTAK TEKS (BookMessage) */
 .message-card {
-  position: relative; /* Aktifkan mode layering */
-  z-index: 10;        /* Kunci agar teks berada di lapisan terdepan */
+  position: relative;
+  z-index: 10;
   background: rgba(255, 255, 255, 0.95);
   padding: 15px 20px;
   border-radius: 15px;
   width: 85%;
   max-width: 340px;
   text-align: center;
-  margin-bottom: 50px; /* Jarak aman agar teks tidak menabrak buku */
+  margin-bottom: 50px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   transition: all 0.5s ease;
   animation: fadeInBookText 0.5s ease-in-out;
 }
 
-.message-title {
-  margin: 0;
-  color: #b55a5a;
-  font-size: 1.1rem;
-}
+.message-title { margin: 0; color: #b55a5a; font-size: 1.1rem; }
+.message-subtitle { margin: 5px 0 0 0; font-size: 0.8rem; color: #777; }
+.message-text { margin: 8px 0; font-size: 0.85rem; color: #333; line-height: 1.4; }
+.message-quote { margin: 5px 0 0 0; font-size: 0.8rem; font-style: italic; color: #888; }
 
-.message-subtitle {
-  margin: 5px 0 0 0;
-  font-size: 0.8rem;
-  color: #777;
-}
-
-.message-text {
-  margin: 8px 0;
-  font-size: 0.85rem;
-  color: #333;
-  line-height: 1.4;
-}
-
-.message-quote {
-  margin: 5px 0 0 0;
-  font-size: 0.8rem;
-  font-style: italic;
-  color: #888;
-}
-
-/* --- KONTROLLER UTAMA & STRUKTUR 3D BUKU --- */
-
-/* Pembungkus Buku Mandiri (Mengisolasi ukuran buku dari teks) */
+/* --- STRUKTUR 3D BUKU --- */
 .book-wrapper {
-  position: relative; /* Aktifkan mode layering */
-  z-index: 10;        /* Kunci posisi buku di depan bintang */
+  position: relative;
+  z-index: 10;
   perspective: 1200px; 
   width: var(--page-width);
   height: var(--page-height);
@@ -97,23 +118,19 @@ body {
   align-items: center;
 }
 
-/* Cari baris ini di App.css Anda dan sesuaikan transition-nya */
 .book-3d {
   position: relative;
   width: var(--page-width);
   height: var(--page-height);
   transform-style: preserve-3d;
-  /* Diubah menjadi 1.2s dengan cubic-bezier agar gesernya sinkron & sehalus sutra bersama halaman */
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1); 
   transform: translateX(0px); 
 }
 
-/* Geser poros buku ke kanan saat terbuka agar posisinya tetap di tengah layar */
 .book-3d.is-opened {
   transform: translateX(calc(var(--page-width) / 2));
 }
 
-/* Lembaran Kertas Buku */
 .book-sheet {
   position: absolute;
   width: 100%;
@@ -121,111 +138,35 @@ body {
   top: 0;
   left: 0;
   transform-style: preserve-3d;
-  transform-origin: left center; /* Titik engsel lipatan buku di sebelah kiri */
+  transform-origin: left center;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
 }
 
-/* Efek Lembaran Berputar Terbalik */
-.flipped-180 {
-  transform: rotateY(-180deg);
-}
+.flipped-180 { transform: rotateY(-180deg); }
 
-/* Sisi Halaman (Depan & Belakang) */
 .sheet-face {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  backface-visibility: hidden; /* Mencegah halaman tembus pandang */
-  padding: 0; /* Mengikuti ukuran penuh gambar */
+  backface-visibility: hidden;
   box-sizing: border-box;
   overflow: hidden;
   border: 1px solid rgba(0,0,0,0.1);
   box-shadow: inset -5px 0 10px rgba(0,0,0,0.15), 3px 3px 10px rgba(0,0,0,0.2);
 }
 
-.face-front {
-  z-index: 2;
-}
+.face-front { z-index: 2; }
+.face-back { transform: rotateY(180deg); z-index: 1; border-radius: 4px 0 0 4px; }
+.base-sheet { transform: none !important; cursor: pointer; }
+.sheet-face img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; display: block; }
 
-.face-back {
-  transform: rotateY(180deg);
-  z-index: 1;
-  border-radius: 4px 0 0 4px;
-}
-
-/* Halaman Dasar Paling Bawah (Kanan Akhir) */
-.base-sheet {
-  transform: none !important;
-  cursor: pointer;
-}
-
-.sheet-face img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 4px;
-  display: block;
-}
-
-/* --- UTILITIES & ANIMASI SCENE LAIN --- */
-
-.main-viewport {
-  position: relative;
-  width: 100vw; height: 100vh;
-  z-index: 1;
-  overflow: hidden;
-}
-
-/* BINTANG BERTERBANGAN (VERSI FIX GLOBAL PERMANEN & ANTI-KEDIP) */
-.starfield {
-  position: fixed; /* Mengunci posisi di layar kaca agar kebal saat ganti scene */
-  top: 0; 
-  left: 0; 
-  width: 100vw; 
-  height: 100vh;
-  
-  background-image: 
-    radial-gradient(circle at 40px 60px, #ffffff 1.5px, transparent 1.5px),
-    radial-gradient(circle at 140px 200px, var(--pink-primary) 2px, transparent 2px),
-    radial-gradient(circle at 220px 90px, #ffffff 1.5px, transparent 1.5px),
-    radial-gradient(circle at 250px 240px, rgba(255, 255, 255, 0.7) 2px, transparent 2px);
-  
-  background-size: 300px 300px;
-  background-repeat: repeat; /* Mengunci agar duplikasi bintang mulus tanpa batas */
-  opacity: 0.7; 
-  
-  z-index: 1; /* Berada tepat di antara background body dan konten scene */
-  pointer-events: none; /* Lapisan bayangan agar sentuhan ke buku/tombol tidak terhalang */
-  
-  /* --- SOS STRATEGI ANTI-FLICKER --- */
-  will-change: background-position;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  
-  animation: flyStarsBy 25s linear infinite;
-}
-
-/* Loop animasi menyambung sempurna */
-@keyframes flyStarsBy {
-  0% { 
-    background-position: 0 0; 
-  }
-  100% { 
-    background-position: 300px 300px; 
-  }
-}
-
+/* --- ANIMASI & EFFEK UTILITY --- */
 .center-content { display: flex; justify-content: center; align-items: center; }
 .flex-col { flex-direction: column; }
-
-.fade-in-scene {
-  animation: smoothSceneEnter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+.fade-in-scene { animation: smoothSceneEnter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 
 @keyframes smoothSceneEnter {
   from { opacity: 0; transform: scale(1.05); }
@@ -237,7 +178,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* SCENE 1 STYLING (MATRIX CANVASES) */
+/* SCENE 1 (MATRIX EFFECT) */
 .matrix-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 .overlay-text-wrapper { text-align: center; pointer-events: none; }
 .pulse-text-matrix {
@@ -250,7 +191,7 @@ body {
 @keyframes textGlowPulse { from { text-shadow: 0 0 10px var(--pink-primary); } to { text-shadow: 0 0 30px var(--pink-primary); } }
 @keyframes heartPulse { to { transform: scale(1.2); } }
 
-/* SCENE 2 UTILITIES tambahan (Tombol dll) */
+/* SCENE 2 UTILITIES (Buku & Tombol) */
 .control-action-btn {
   margin-bottom: 40px; padding: 14px 32px; font-size: 1.1rem; font-weight: 600; color: white;
   background: linear-gradient(135deg, #ff477e, #ff2a6d); border: none; border-radius: 30px;
@@ -268,15 +209,10 @@ body {
 .letter-text { font-family: 'Georgia', serif; line-height: 1.6; font-size: 1.05rem; color: #333; }
 .signature { text-align: right; font-weight: bold; margin-top: 30px; font-family: 'Georgia', serif; }
 
-
-/* =======================================================
-   SCENE 3 STYLING (Garis Tepi Hati Sempurna & Kosong di Tengah)
-   ======================================================= */
-
-/* Pasang container utama mati di tengah-tengah layar */
+/* SCENE 3 (FORMASI HATI FOTO) */
 .heart-formation-grid {
   position: relative;
-  z-index: 10; /* Kunci formasi hati di atas lapisan bintang global */
+  z-index: 10; 
   width: 100%;
   height: 100%;
   display: flex;
@@ -284,7 +220,6 @@ body {
   align-items: center;
 }
 
-/* Ukuran foto dibuat mini & kotak estetik */
 .scatter-polaroid {
   position: absolute;
   width: 60px;   
@@ -293,51 +228,26 @@ body {
   padding: 3px;
   border-radius: 12px;
   box-sizing: border-box;
-  
-  /* Efek Neon Glow Pink Cerah Mengitari Foto */
   border: 2px solid #ff9ebb;
-  box-shadow: 
-    0 0 8px var(--pink-primary), 
-    0 0 16px rgba(255, 71, 126, 0.6);
+  box-shadow: 0 0 8px var(--pink-primary), 0 0 16px rgba(255, 71, 126, 0.6);
   
-  /* Titik awal keluar dari tengah */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0) rotate(0deg);
   opacity: 0;
-  
-  /* Animasi menyebar yang halus dan rapi */
   animation: popToPerfectHeart 1s cubic-bezier(0.25, 1.1, 0.4, 1) forwards;
 }
 
-/* Memastikan gambar memenuhi frame kotak */
-.scatter-polaroid img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 9px;
-  display: block;
-}
+.scatter-polaroid img { width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block; }
 
-/* Animasi Pop-Out Menyebar */
 @keyframes popToPerfectHeart {
-  0% {
-    transform: translate(-50%, -50%) scale(0) rotate(0deg);
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot));
-  }
+  0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 1; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); }
 }
 
-/* MATRIKS KOORDINAT SIMETRIS (8 KIRI, 8 KANAN, 1 BAWAH) */
+/* MATRIKS KOORDINAT FORMASI HATI */
 .target-pos-9  { --tx: 0px;    --ty: 110px;  --rot: 0deg; }
-
-/* 8 FOTO SISI KIRI */
 .target-pos-8  { --tx: -24px;  --ty: 85px;   --rot: -6deg; }
 .target-pos-7  { --tx: -48px;  --ty: 60px;   --rot: -12deg; }
 .target-pos-6  { --tx: -72px;  --ty: 32px;   --rot: -18deg; }
@@ -346,8 +256,6 @@ body {
 .target-pos-3  { --tx: -84px;  --ty: -60px;  --rot: 8deg; }
 .target-pos-2  { --tx: -54px;  --ty: -74px;  --rot: 18deg; }
 .target-pos-1  { --tx: -22px;  --ty: -56px;  --rot: 5deg; }
-
-/* 8 FOTO SISI KANAN */
 .target-pos-10 { --tx: 24px;   --ty: 85px;   --rot: 6deg; }
 .target-pos-11 { --tx: 48px;   --ty: 60px;   --rot: 12deg; }
 .target-pos-12 { --tx: 72px;   --ty: 32px;   --rot: 18deg; }
