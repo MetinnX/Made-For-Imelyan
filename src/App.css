@@ -2,6 +2,11 @@
   --bg-dark: #0b0914;
   --pink-primary: #ff477e;
   --pink-glow: rgba(255, 71, 126, 0.6);
+  
+  /* --- PENGATURAN UKURAN BUKU --- */
+  /* Ubah dua angka di bawah ini untuk mengecilkan/membesarkan ukuran buku */
+  --page-width: 160px;   
+  --page-height: 230px;  
 }
 
 body {
@@ -12,7 +17,13 @@ body {
   color: #fff;
 }
 
+/* CONTAINER UTAMA SCENE */
 .scene-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,46 +31,122 @@ body {
   min-height: 100vh;
   background: #000;
   padding: 20px;
+  box-sizing: border-box;
 }
 
+/* KOTAK TEKS DI ATAS BUKU (BookMessage) */
 .message-card {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 15px;
-  border-radius: 12px;
-  width: 250px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px 20px;
+  border-radius: 15px;
+  width: 85%;
+  max-width: 340px;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 50px; /* Jarak aman agar teks tidak menabrak buku */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.5s ease;
+  animation: fadeInBookText 0.5s ease-in-out;
+}
+
+.message-title {
+  margin: 0;
+  color: #b55a5a;
+  font-size: 1.1rem;
+}
+
+.message-subtitle {
+  margin: 5px 0 0 0;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.message-text {
+  margin: 8px 0;
+  font-size: 0.85rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.message-quote {
+  margin: 5px 0 0 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #888;
+}
+
+/* --- KONTROLLER UTAMA & STRUKTUR 3D BUKU --- */
+
+/* Pembungkus Buku Mandiri (Mengisolasi ukuran buku dari teks) */
+.book-wrapper {
+  perspective: 1200px; 
+  width: var(--page-width);
+  height: var(--page-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .book-3d {
-  width: 220px;
-  height: 300px;
   position: relative;
-  perspective: 1500px;
-  cursor: pointer;
+  width: var(--page-width);
+  height: var(--page-height);
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+  transform: translateX(0px); 
 }
 
+/* Geser poros buku ke kanan saat terbuka agar posisinya tetap di tengah layar */
+.book-3d.is-opened {
+  transform: translateX(calc(var(--page-width) / 2));
+}
+
+/* Lembaran Kertas Buku */
 .book-sheet {
   position: absolute;
   width: 100%;
   height: 100%;
-  transform-origin: left;
-  /* Animasi super smooth */
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+  top: 0;
+  left: 0;
   transform-style: preserve-3d;
+  transform-origin: left center; /* Titik engsel lipatan buku di sebelah kiri */
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
 }
 
+/* Efek Lembaran Berputar Terbalik */
 .flipped-180 {
   transform: rotateY(-180deg);
 }
 
+/* Sisi Halaman (Depan & Belakang) */
 .sheet-face {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden; /* Mencegah tembus pandang */
+  top: 0;
+  left: 0;
+  backface-visibility: hidden; /* Mencegah halaman tembus pandang */
+  padding: 0; /* Mengikuti ukuran penuh gambar */
+  box-sizing: border-box;
+  overflow: hidden;
   border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: inset -5px 0 10px rgba(0,0,0,0.15), 3px 3px 10px rgba(0,0,0,0.2);
+}
+
+.face-front {
+  z-index: 2;
+}
+
+.face-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Halaman Dasar Paling Bawah (Kanan Akhir) */
+.base-sheet {
+  transform: none !important;
+  cursor: pointer;
 }
 
 .sheet-face img {
@@ -67,7 +154,10 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 4px;
+  display: block;
 }
+
+/* --- UTILITIES & ANIMASI SCENE LAIN --- */
 
 .main-viewport {
   position: relative;
@@ -75,7 +165,6 @@ body {
   z-index: 1;
 }
 
-/* Latar Belakang Bintang */
 .starfield {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -89,14 +178,19 @@ body {
 
 .center-content { display: flex; justify-content: center; align-items: center; }
 .flex-col { flex-direction: column; }
-.scene-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
 
 .fade-in-scene {
   animation: smoothSceneEnter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
+
 @keyframes smoothSceneEnter {
   from { opacity: 0; transform: scale(1.05); }
   to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInBookText {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* SCENE 1 STYLING (MATRIX CANVASES) */
@@ -107,53 +201,12 @@ body {
   text-shadow: 0 0 20px var(--pink-primary), 0 0 40px var(--pink-primary);
   animation: textGlowPulse 2s ease-in-out infinite alternate;
 }
-
-/* Kontainer utama buku */
-.book-3d {
-  position: relative;
-  width: 250px; /* Sesuaikan ukuran buku Anda */
-  height: 350px;
-  perspective: 1500px; /* Penting agar efek 3D terlihat */
-}
-
-/* Setiap lembaran kertas */
-.book-sheet {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d; /* Wajib agar sisi depan-belakang jalan */
-  transform-origin: left center; /* Titik putar harus di sebelah kiri (engsel buku) */
-  transition: transform 0.8s ease-in-out;
-}
-
-/* Saat halaman diputar */
-.flipped-180 {
-  transform: rotateY(-180deg);
-}
-
-/* Sisi depan dan belakang dari satu lembar kertas */
-.sheet-face {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden; /* Menyembunyikan gambar yang sedang membelakangi layar */
-}
-
-/* Membalik sisi belakang agar tidak terbalik secara visual */
-.face-back {
-  transform: rotateY(180deg);
-}
-
-
 .matrix-heart { font-size: 5rem; animation: heartPulse 0.6s infinite alternate cubic-bezier(0.25, 0.8, 0.25, 1); }
+
 @keyframes textGlowPulse { from { text-shadow: 0 0 10px var(--pink-primary); } to { text-shadow: 0 0 30px var(--pink-primary); } }
 @keyframes heartPulse { to { transform: scale(1.2); } }
 
-/* SCENE 2 STYLING (Premium 3D Book) */
+/* SCENE 2 UTILITIES tambahan (Tombol dll) */
 .control-action-btn {
   margin-bottom: 40px; padding: 14px 32px; font-size: 1.1rem; font-weight: 600; color: white;
   background: linear-gradient(135deg, #ff477e, #ff2a6d); border: none; border-radius: 30px;
@@ -161,14 +214,6 @@ body {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 50;
 }
 .control-action-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(255, 71, 126, 0.6); }
-
-.book-3d { position: relative; width: 320px; height: 440px; transition: transform 1.2s ease; transform-style: preserve-3d; perspective: 2000px; }
-.book-3d.is-opened { transform: translateX(160px); }
-.book-sheet { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transform-origin: left center; transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
-.sheet-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; padding: 30px; box-sizing: border-box; box-shadow: 5px 10px 25px rgba(0,0,0,0.3); }
-.face-front { z-index: 2; }
-.face-back { transform: rotateY(180deg); z-index: 1; }
-.flipped-180 { transform: rotateY(-180deg); }
 
 .cover-front { background: linear-gradient(135deg, #ff477e, #e0285d); border-radius: 0 14px 14px 0; border-left: 6px solid #b81440; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
 .page-bg { background-color: #fbf9f5; color: #2b2b2b; border-radius: 0 10px 10px 0; }
