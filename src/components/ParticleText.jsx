@@ -4,7 +4,7 @@ export default function ParticleText({ onComplete }) {
   const canvasRef = useRef(null);
   const [text, setText] = useState("3");
   const particlesRef = useRef([]);
-  const sequence = ["3", "2", "1", "GIFT", "FORR", "YOUU", "IMELL", "❤️"];
+  const sequence = ["3", "2", "1", "GIFT", "FORR", "YOUU", "IMEL", "❤️"];
 
   useEffect(() => {
     let index = 0;
@@ -19,7 +19,7 @@ export default function ParticleText({ onComplete }) {
           onComplete();
         }, 2000);
       }
-    }, 2500); // Durasi diperlambat menjadi 2.5 detik per kata agar nyaman dibaca
+    }, 2200); // Durasi diperlambat menjadi 2.5 detik per kata agar nyaman dibaca
     
     return () => clearInterval(interval);
   }, [onComplete]);
