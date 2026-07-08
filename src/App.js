@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BookScene from './BookScene';
+import MatrixScene from './MatrixScene';
 import CollageScene from './CollageScene';
 
 // Taruh audio di file utama agar bisa dikontrol global
