@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from 'react';
 import { getBgMusic, isBgMusicPlaying, pauseBgMusic, playBgMusic } from '../utils/music';
 
 export default function CollageScene() {
