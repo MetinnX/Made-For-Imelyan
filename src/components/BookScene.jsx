@@ -1,6 +1,5 @@
 uimport React, { useState } from 'react';
-import BookMessage from './components/BookMessage';
-
+import BookMessage from './BookMessage';
 const bgMusic = new Audio('/assets/music/background-song.mp3');
 
 
